@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Transform _ground;
     [SerializeField] private Transform _obstaclePrafab;
     [SerializeField] private RectTransform _loseScreen;
     [SerializeField] private TextMeshProUGUI _playerScoreVisual;
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     private Queue<Transform> _obstaclesQueue = new Queue<Transform>();
     private int _playerScore;
     private int _queueLength = 7;
+    private int _halfMapSize;
     private float _obstacleReplacementTimer;
     private float _obstacleReplacementDelay;
     private float _obstacleReplacementFrequency;
@@ -24,8 +26,9 @@ public class GameManager : MonoBehaviour
     {
         _randomYSpacing = new System.Random();
 
-        _obstacleReplacementDelay = _obstacleSpacingX / _gameSpeed;
-        _obstacleReplacementTimer = _obstacleReplacementDelay;
+        _halfMapSize = (int)_ground.localScale.x / 2;
+        _obstacleReplacementDelay = _halfMapSize / _gameSpeed;
+        _obstacleReplacementFrequency = _obstacleSpacingX / _gameSpeed;
 
         //Creating obstacles
         for (int i = 0; i < _queueLength; i++)
@@ -80,7 +83,7 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        _obstacleReplacementTimer = _obstacleReplacementDelay;
+        _obstacleReplacementTimer = -_obstacleReplacementDelay;
 
         transform.position = Vector3.zero;
 

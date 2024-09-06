@@ -296,6 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8886618a404be41478d11155c832d25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ground: {fileID: 78892446}
   _obstaclePrafab: {fileID: 6476662076717382068, guid: 48d28b5bbff09e347b342fb678e6d211, type: 3}
   _loseScreen: {fileID: 363368042}
   _playerScoreVisual: {fileID: 2110032890}
