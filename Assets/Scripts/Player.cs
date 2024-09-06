@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //Jump
         if (Input.GetKeyDown(KeyCode.Space) && Time.timeScale != 0)
         {
             _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0f);

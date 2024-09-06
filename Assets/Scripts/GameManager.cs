@@ -15,17 +15,19 @@ public class GameManager : MonoBehaviour
     private Queue<Transform> _obstaclesQueue = new Queue<Transform>();
     private int _playerScore;
     private int _queueLength = 7;
-    private int _halfMapSize = 10;
-    private float _obstacleReplacmentTimer;
-    private float _obstacleReplacmentFrequency;
+    private float _obstacleReplacementTimer;
+    private float _obstacleReplacementDelay;
+    private float _obstacleReplacementFrequency;
     private System.Random _randomYSpacing;
 
     private void Start()
     {
         _randomYSpacing = new System.Random();
 
-        _obstacleReplacmentFrequency = _obstacleSpacingX / _gameSpeed;
+        _obstacleReplacementDelay = _obstacleSpacingX / _gameSpeed;
+        _obstacleReplacementTimer = _obstacleReplacementDelay;
 
+        //Creating obstacles
         for (int i = 0; i < _queueLength; i++)
         {
             _obstaclesQueue.Enqueue(Instantiate(_obstaclePrafab, transform));
@@ -52,18 +54,20 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        //Move obstacles forward player
         transform.Translate(Vector3.left  * _gameSpeed * Time.deltaTime);
 
-        _obstacleReplacmentTimer += Time.deltaTime;
+        _obstacleReplacementTimer += Time.deltaTime;
 
-        if (_obstacleReplacmentTimer > _obstacleReplacmentFrequency)
+        //Replacing first passed and already invisible obstacle from start at the end of the queue
+        if (_obstacleReplacementTimer > _obstacleReplacementFrequency)
         {
             Transform t = _obstaclesQueue.Dequeue();
             _obstaclesQueue.Enqueue(t);
 
             t.position = new Vector3(t.position.x + (_obstacleSpacingX * _queueLength), _randomYSpacing.Next(-_obstacleSpacingY, _obstacleSpacingY), 0);
 
-            _obstacleReplacmentTimer = 0;
+            _obstacleReplacementTimer = 0;
         }
     }
 
@@ -76,18 +80,20 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        _obstacleReplacmentTimer = -_halfMapSize / _gameSpeed;
+        _obstacleReplacementTimer = _obstacleReplacementDelay;
 
         transform.position = Vector3.zero;
 
         int spacing = 0;
 
+        //Making space between obstacles
         foreach (Transform t in _obstaclesQueue)
         {
             t.position = new Vector3(spacing, _randomYSpacing.Next(-_obstacleSpacingY, _obstacleSpacingY), 0);
             spacing += _obstacleSpacingX;
         }
 
+        //Place player at default position
         Player.Instance.GoToStartPosition();
     }
 }
